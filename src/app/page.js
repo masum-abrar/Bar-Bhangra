@@ -17,14 +17,14 @@ export default function Home() {
       <HeroEvent />
       <EventPopup />
       <HistorySection />
-      {/* <MenuSection /> */}
+      <MenuSection />
       {/* <Highlights /> */}
       {/* <InstagramFeed /> */}
-      {/* <Reviews />
+      <Reviews />
 
       <GallerySection />
 
-      <ContactSection /> */}
+      <ContactSection />
       <Footer />
     </div>
   );
