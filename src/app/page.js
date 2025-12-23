@@ -9,6 +9,7 @@ import InstagramFeed from "@/components/InstagramFeed";
 import MenuSection from "@/components/MenuSection";
 import Navbar from "@/components/Navbar";
 import Reviews from "@/components/Reviews";
+import SocialSection from "@/components/SocialSection";
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
       <GallerySection />
 
       <ContactSection />
+      <SocialSection />
       <Footer />
     </div>
   );

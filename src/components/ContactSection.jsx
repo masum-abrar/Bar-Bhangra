@@ -14,7 +14,10 @@ import {
   FaPaperPlane,
   FaCheckCircle,
   FaExclamationCircle,
+  FaWhatsapp,
 } from "react-icons/fa";
+import API from "@/libs/Api";
+import toast, { Toaster } from "react-hot-toast";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -61,15 +64,43 @@ export default function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await API.post("/bar-contact", {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        message: formData.message,
+      });
+
       setIsSubmitting(false);
-      setSubmitStatus("success");
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
 
-      // Reset status after 5 seconds
-      setTimeout(() => setSubmitStatus("idle"), 5000);
-    }, 1500);
+      toast.success(
+        "🎉 Message sent successfully! We'll get back to you soon.",
+        {
+          style: {
+            background: "#111",
+            color: "#fff",
+            padding: "16px",
+            borderRadius: "12px",
+          },
+          icon: "✉️",
+        }
+      );
+    } catch (err) {
+      console.error(err);
+      setIsSubmitting(false);
+
+      toast.error("❌ Something went wrong. Please try again later.", {
+        style: {
+          background: "#111",
+          color: "#fff",
+          padding: "16px",
+          borderRadius: "12px",
+        },
+        icon: "⚠️",
+      });
+    }
   };
 
   const handleChange = (e) => {
@@ -203,27 +234,6 @@ export default function ContactSection() {
                 </p>
               </div>
             </div>
-
-            {/* Social Links */}
-            <div>
-              <h4 className="text-lg font-semibold text-white mb-4">
-                Follow Us
-              </h4>
-              <div className="flex gap-4">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-full bg-gray-900/50 border border-gray-800/50 hover:border-red-600/50 hover:bg-gray-800/50 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300"
-                    aria-label={social.label}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Contact Form */}
@@ -324,32 +334,6 @@ export default function ContactSection() {
                       placeholder="+358 40 123 4567"
                     />
                   </div>
-
-                  <div>
-                    <label
-                      htmlFor="subject"
-                      className="block text-sm font-medium text-gray-300 mb-2"
-                    >
-                      Subject *
-                    </label>
-                    <select
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/30 transition-all duration-300 appearance-none"
-                    >
-                      <option value="" disabled>
-                        Select a subject
-                      </option>
-                      <option value="reservation">Table Reservation</option>
-                      <option value="catering">Catering Services</option>
-                      <option value="private-events">Private Events</option>
-                      <option value="feedback">Feedback & Reviews</option>
-                      <option value="other">Other Inquiry</option>
-                    </select>
-                  </div>
                 </div>
 
                 <div>
@@ -374,7 +358,7 @@ export default function ContactSection() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
+                  className={`btn-splash w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
                     isSubmitting
                       ? "bg-gray-700 cursor-not-allowed"
                       : "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 hover:shadow-2xl hover:shadow-red-600/30"
@@ -410,6 +394,7 @@ export default function ContactSection() {
 
         {/* Map Preview */}
       </div>
+      <Toaster position="top-center" reverseOrder={false} duration={5000} />
     </section>
   );
 }

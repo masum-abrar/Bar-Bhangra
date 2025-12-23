@@ -19,7 +19,7 @@ export default function EventPopup() {
   const popupRef = useRef(null);
   const overlayRef = useRef(null);
   const contentRef = useRef(null);
-  const event = events[0];
+  const [event, setEvent] = useState(null);
 
   // Check for mobile on mount and resize
   useEffect(() => {
@@ -30,6 +30,25 @@ export default function EventPopup() {
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const res = await fetch(
+          "https://bar-bhangra-backend.vercel.app/api/v1/bar-events"
+        );
+        const data = await res.json();
+        if (data.success && data.data.length > 0) {
+          setEvent(data.data[0]); // use first event
+        } else {
+          console.error("No events found");
+        }
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+      }
+    };
+    fetchEvent();
   }, []);
 
   useEffect(() => {
@@ -119,7 +138,7 @@ export default function EventPopup() {
       {/* Overlay with Glass Effect */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-[100] flex items-center justify-center"
+        className="fixed inset-0 z-100 flex items-center justify-center"
       >
         {/* Glass Overlay - Different opacity for mobile */}
         <div
@@ -158,18 +177,18 @@ export default function EventPopup() {
 
             {/* Header with Image */}
             <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent z-10" />
               <img
-                src={event.image}
-                alt={event.title}
-                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+                src={event?.imageUrl}
+                alt={event?.title}
+                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 p-2"
               />
 
               {/* Premium Badge - Responsive size */}
               <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-20">
-                <div className="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-gray-900/90 to-black/90 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-red-600/30">
+                <div className="flex items-center gap-1.5 sm:gap-2 bg-linear-to-r from-gray-900/90 to-black/90 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-red-600/30">
                   <FaCrown className="text-yellow-400 text-xs sm:text-sm" />
-                  <span className="text-xs sm:text-sm font-bold bg-gradient-to-r from-yellow-300 to-amber-300 bg-clip-text text-transparent whitespace-nowrap">
+                  <span className="text-xs sm:text-sm font-bold bg-linear-to-r from-yellow-300 to-amber-300 bg-clip-text text-transparent whitespace-nowrap">
                     EXCLUSIVE
                   </span>
                 </div>
@@ -198,7 +217,7 @@ export default function EventPopup() {
 
                 <h2 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
                   <span className="bg-gradient-to-r from-red-400 via-red-500 to-amber-500 bg-clip-text text-transparent">
-                    {event.title}
+                    {event?.title}
                   </span>
                 </h2>
 
@@ -217,8 +236,14 @@ export default function EventPopup() {
                     </div>
                     <div>
                       <p className="text-xs sm:text-sm text-gray-400">Date</p>
-                      <p className="text-white font-semibold text-sm sm:text-base">
-                        {event.date}
+                      <p className="text-white font-medium">
+                        {event?.date
+                          ? new Date(event.date).toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })
+                          : ""}
                       </p>
                     </div>
                   </div>
@@ -232,7 +257,7 @@ export default function EventPopup() {
                     <div>
                       <p className="text-xs sm:text-sm text-gray-400">Time</p>
                       <p className="text-white font-semibold text-sm sm:text-base">
-                        {event.start} - {event.end}
+                        {event?.start} - {event?.end}
                       </p>
                     </div>
                   </div>
@@ -254,28 +279,28 @@ export default function EventPopup() {
                 </div>
 
                 <div className="space-y-2 sm:space-y-3">
-                  {event.specialMenu.slice(0, 2).map((item, index) => (
+                  {event?.specialMenu?.slice(0, 2).map((item, index) => (
                     <div
-                      key={item.name}
+                      key={item?.name}
                       className="flex justify-between items-center bg-gray-900/30 p-2.5 sm:p-3 rounded-lg border border-gray-800/30 hover:border-red-600/30 transition-all duration-300"
                     >
                       <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                         <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-r from-red-500 to-amber-500 rounded-full flex-shrink-0" />
                         <span className="text-white font-medium text-sm sm:text-base truncate">
-                          {item.name}
+                          {item?.name}
                         </span>
                       </div>
                       <span className="text-amber-300 font-bold text-base sm:text-lg flex-shrink-0 ml-2">
-                        {item.price}
+                        {item?.price}
                       </span>
                     </div>
                   ))}
                 </div>
 
                 {/* View More on Mobile */}
-                {isMobile && event.specialMenu.length > 2 && (
+                {isMobile && event?.specialMenu?.length > 2 && (
                   <button className="w-full mt-3 py-2 text-gray-400 text-sm flex items-center justify-center gap-1 hover:text-white transition-colors">
-                    View {event.specialMenu.length - 2} more items
+                    View {event?.specialMenu?.length - 2} more items
                     <FaChevronDown className="text-xs" />
                   </button>
                 )}
@@ -288,7 +313,7 @@ export default function EventPopup() {
                   Event Highlights
                 </h3>
                 <ul className="space-y-1.5 sm:space-y-2">
-                  {event.plan?.slice(0, 3).map((point, index) => (
+                  {event?.plan?.slice(0, 3).map((point, index) => (
                     <li key={index} className="flex items-start gap-2 sm:gap-3">
                       <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-red-500 rounded-full mt-2 sm:mt-2.5 flex-shrink-0" />
                       <span className="text-gray-300 text-sm sm:text-base leading-relaxed">
@@ -320,60 +345,6 @@ export default function EventPopup() {
           )}
         </div>
       </div>
-
-      {/* Custom Animation Styles */}
-      <style jsx>{`
-        @keyframes pulse-glow {
-          0%,
-          100% {
-            opacity: 0.5;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-
-        @keyframes swipe-up {
-          0% {
-            transform: translateY(100%);
-          }
-          100% {
-            transform: translateY(0);
-          }
-        }
-
-        .animate-pulse {
-          animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .overflow-y-auto::-webkit-scrollbar {
-          display: none;
-        }
-
-        /* Hide scrollbar for IE, Edge and Firefox */
-        .overflow-y-auto {
-          -ms-overflow-style: none; /* IE and Edge */
-          scrollbar-width: none; /* Firefox */
-        }
-
-        /* Mobile optimizations */
-        @media (max-width: 640px) {
-          .max-h-\[90vh\] {
-            max-height: calc(100vh - 2rem);
-          }
-        }
-
-        /* Small phone optimizations */
-        @media (max-width: 375px) {
-          .text-2xl {
-            font-size: 1.5rem;
-          }
-          .p-5 {
-            padding: 1rem;
-          }
-        }
-      `}</style>
     </>
   );
 }

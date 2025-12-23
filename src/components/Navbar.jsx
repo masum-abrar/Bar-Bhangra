@@ -121,10 +121,36 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={() => handleLinkClick("contact")}
-                className="ml-4 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-red-600/20 flex items-center gap-2 group"
+                className="relative overflow-hidden ml-4 px-6 py-3
+    bg-gradient-to-r from-red-600 to-red-700
+    text-white font-semibold rounded-xl
+    flex items-center gap-2
+    transition-all duration-300
+    hover:shadow-xl hover:shadow-red-600/30
+    hover:scale-105
+    group"
               >
-                <FaPhoneAlt className="text-sm" />
-                <span>Book Now</span>
+                {/* Animated Splash Effect */}
+                <span
+                  className="absolute inset-0 
+      bg-gradient-to-r from-transparent via-white/30 to-transparent
+      -translate-x-full
+      group-hover:translate-x-full
+      transition-transform duration-700 ease-in-out
+      animate-splash"
+                />
+
+                {/* Shimmer Effect (Optional - Extra shine) */}
+                <span
+                  className="absolute inset-0
+      bg-gradient-to-r from-transparent via-white/10 to-transparent
+      -translate-x-full
+      animate-shimmer"
+                />
+
+                {/* Content */}
+                <FaPhoneAlt className="relative z-10 text-sm" />
+                <span className="relative z-10">Book Now</span>
               </a>
             </nav>
 
@@ -237,49 +263,12 @@ export default function Navbar() {
 
       {/* Scroll progress indicator */}
       <div
-        className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-600 via-amber-500 to-red-600 z-[101] transform origin-left transition-transform duration-300"
+        className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-red-600 via-amber-500 to-red-600 z-101 transform origin-left transition-transform duration-300"
         style={{
           transform: `scaleX(${scrolled ? "1" : "0"})`,
           opacity: scrolled ? 1 : 0,
         }}
       />
-
-      {/* Custom styles for smooth transitions */}
-      <style jsx>{`
-        /* Smooth scroll behavior */
-        html {
-          scroll-behavior: smooth;
-        }
-
-        /* Custom scrollbar for nav */
-        @media (min-width: 1024px) {
-          nav::-webkit-scrollbar {
-            height: 4px;
-          }
-          nav::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 2px;
-          }
-          nav::-webkit-scrollbar-thumb {
-            background: linear-gradient(to right, #dc2626, #d97706);
-            border-radius: 2px;
-          }
-        }
-
-        /* Animation for active indicator */
-        @keyframes pulse-glow {
-          0%,
-          100% {
-            opacity: 0.7;
-          }
-          50% {
-            opacity: 1;
-          }
-        }
-        .animate-pulse {
-          animation: pulse-glow 2s ease-in-out infinite;
-        }
-      `}</style>
     </>
   );
 }

@@ -273,18 +273,18 @@ export default function SpecialReviews() {
                               </div>
 
                               {/* Rating */}
-                              {/* <div className="flex items-center gap-1 bg-black/60 backdrop-blur-sm px-3 py-2 rounded-full">
+                              <div className="flex items-center gap-1 bg-black/60 backdrop-blur-sm px-3 py-2 rounded-full">
                                 {[...Array(5)].map((_, i) => (
                                   <FaStar
                                     key={i}
                                     className={`text-sm ${
                                       i < review.rating
-                                        ? "text-red-400"
+                                        ? "text-yellow-400"
                                         : "text-gray-600"
                                     }`}
                                   />
                                 ))}
-                              </div> */}
+                              </div>
                             </div>
 
                             {/* Bottom info */}
@@ -292,7 +292,7 @@ export default function SpecialReviews() {
                               <div className="flex items-center gap-3 mb-4">
                                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-red-500/50">
                                   <img
-                                    src={`https://api.dicebear.com/6.x/avataaars/svg?seed=${Math.random()}`}
+                                    src={review.avatar}
                                     alt={review.name}
                                     className="w-full h-full object-cover"
                                   />
