@@ -24,9 +24,9 @@ export default function Home() {
       <Reviews />
 
       <GallerySection />
-
-      <ContactSection />
       <SocialSection />
+      <ContactSection />
+
       <Footer />
     </div>
   );

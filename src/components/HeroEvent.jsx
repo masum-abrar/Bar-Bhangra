@@ -24,8 +24,12 @@ export default function HeroEvent() {
   const titleRef = useRef(null);
   const menuItemsRef = useRef([]);
   const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!event) return;
+
+    if (!imageRef.current || !contentRef.current || !titleRef.current) return;
     gsap.set([imageRef.current, contentRef.current], { opacity: 0, y: 50 });
     gsap.set(titleRef.current, { opacity: 0, x: -30 });
     gsap.set(menuItemsRef.current, { opacity: 0, y: 20 });
@@ -75,7 +79,7 @@ export default function HeroEvent() {
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, []);
+  }, [event]);
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -83,17 +87,36 @@ export default function HeroEvent() {
           "https://bar-bhangra-backend.vercel.app/api/v1/bar-events"
         );
         const data = await res.json();
+
         if (data.success && data.data.length > 0) {
-          setEvent(data.data[0]); // use first event
-        } else {
-          console.error("No events found");
+          setEvent(data.data[0]);
         }
       } catch (err) {
         console.error("Failed to fetch events", err);
+      } finally {
+        setLoading(false); // 🔥 important
       }
     };
+
     fetchEvent();
   }, []);
+  if (loading) {
+    return (
+      <section className="relative min-h-screen bg-black flex items-center justify-center overflow-hidden">
+        {/* subtle grid */}
+        <div className="absolute inset-0 bg-[linear-linear(#0f0f0f_1px,transparent_1px),linear-linear(90deg,#0f0f0f_1px,transparent_1px)] bg-[size:40px_40px] opacity-30" />
+
+        {/* loader */}
+        <div className="relative z-10 flex flex-col items-center gap-6">
+          <div className="w-16 h-16 border-4 border-red-600/30 border-t-red-600 rounded-full animate-spin" />
+
+          <p className="text-gray-400 tracking-widest uppercase text-sm">
+            Loading Event
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -103,7 +126,7 @@ export default function HeroEvent() {
     >
       {/* Pixel Grid Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(#0f0f0f_1px,transparent_1px),linear-gradient(90deg,#0f0f0f_1px,transparent_1px)] bg-[size:40px_40px] opacity-40" />
+        <div className="absolute inset-0 bg-[linear-linear(#0f0f0f_1px,transparent_1px),linear-linear(90deg,#0f0f0f_1px,transparent_1px)] bg-[size:40px_40px] opacity-40" />
 
         {/* Animated Red Pixels */}
         <div className="absolute inset-0">
@@ -122,8 +145,8 @@ export default function HeroEvent() {
         </div>
 
         {/* Grid Overlays */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent" />
+        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-red-600 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-red-600 to-transparent" />
 
         {/* Corner Grid Accents */}
         <div className="absolute top-0 left-0 w-20 h-20 border-l-2 border-t-2 border-red-600" />
@@ -148,9 +171,9 @@ export default function HeroEvent() {
                 className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-700"
                 style={{
                   background:
-                    "linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #ff00c8, #ff0000)",
+                    "linear-linear(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #ff00c8, #ff0000)",
                   backgroundSize: "400% 400%",
-                  animation: "gradient 3s ease infinite",
+                  animation: "linear 3s ease infinite",
                   filter: "blur(10px)",
                   zIndex: 0,
                 }}
@@ -196,7 +219,7 @@ export default function HeroEvent() {
                   className="absolute inset-0 z-30 opacity-0 group-hover:opacity-50 transition-opacity duration-700"
                   style={{
                     background:
-                      "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)",
+                      "linear-linear(90deg, transparent, rgba(255,255,255,0.1), transparent)",
                     transform: "translateX(-100%)",
                     transition: "transform 1.5s ease-in-out, opacity 0.7s",
                   }}
@@ -230,12 +253,12 @@ export default function HeroEvent() {
                   }}
                 />
 
-                {/* 🔥 Overlay Gradient */}
+                {/* 🔥 Overlay linear */}
                 <div
                   className="absolute inset-0 z-25 pointer-events-none"
                   style={{
                     background:
-                      "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.8) 100%)",
+                      "linear-linear(to top, rgba(0,0,0,0.8) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.8) 100%)",
                     opacity: 0.7,
                     transition: "opacity 0.5s",
                   }}
@@ -255,7 +278,7 @@ export default function HeroEvent() {
                       style={{
                         width: "3px",
                         height: "3px",
-                        background: `linear-gradient(45deg, ${
+                        background: `linear-linear(45deg, ${
                           i % 4 === 0
                             ? "#ef4444"
                             : i % 4 === 1
@@ -300,7 +323,7 @@ export default function HeroEvent() {
                 <div className="relative">
                   {/* Badge Shadow */}
                   <div
-                    className="absolute -inset-1 bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 
+                    className="absolute -inset-1 bg-linear-to-r from-red-600 via-purple-600 to-blue-600 
                        rounded-lg blur opacity-0 group-hover:opacity-70 transition duration-700"
                   />
 
@@ -309,7 +332,7 @@ export default function HeroEvent() {
                     className="relative px-4 py-2 rounded-lg"
                     style={{
                       background:
-                        "linear-gradient(145deg, rgba(0,0,0,0.9), rgba(30,30,30,0.9))",
+                        "linear-linear(145deg, rgba(0,0,0,0.9), rgba(30,30,30,0.9))",
                       border: "1px solid rgba(255,255,255,0.1)",
                       boxShadow:
                         "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)",
@@ -329,7 +352,7 @@ export default function HeroEvent() {
                         <div className="absolute inset-0 bg-yellow-400 blur-sm opacity-0 group-hover:opacity-50" />
                       </div>
                       <span
-                        className="font-bold text-sm tracking-wider bg-gradient-to-r from-red-600 to-red-700"
+                        className="font-bold text-sm tracking-wider bg-linear-to-r from-red-600 to-red-700"
                         style={{
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
@@ -389,7 +412,7 @@ export default function HeroEvent() {
             {/* Title */}
             <div className="mb-10">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-px bg-gradient-to-r from-red-600 to-transparent" />
+                <div className="w-16 h-px bg-linear-to-r from-red-600 to-transparent" />
                 <span className="text-red-400 font-semibold tracking-widest uppercase text-xs">
                   Exclusive Dining
                 </span>

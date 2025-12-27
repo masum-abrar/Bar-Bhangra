@@ -43,7 +43,28 @@ const SocialSection = () => {
     { icon: <FaTwitter />, href: "#", label: "Twitter" },
   ];
   return (
-    <div className="relative py-20 bg-gradient-to-b from-black via-gray-950 to-black text-white overflow-hidden ">
+    <div className="relative py-20 bg-linear-to-b from-black via-gray-950 to-black text-white overflow-hidden ">
+      {/* ===== Section Header ===== */}
+      <div className="text-center mb-16">
+        <div className="inline-flex items-center justify-center mb-6">
+          <div className="w-12 h-px bg-linear-to-r from-transparent to-red-600 mr-4" />
+          <span className="text-red-600 text-2xl">🌐</span>
+          <div className="w-12 h-px bg-linear-to-l from-transparent to-red-600 ml-4" />
+        </div>
+
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+          Stay{" "}
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-red-600 to-red-400">
+            Connected
+          </span>
+        </h2>
+
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto font-light leading-relaxed">
+          Follow us on social media or join our WhatsApp community for instant
+          updates.
+        </p>
+      </div>
+
       {/* Social & WhatsApp Section */}
       <div className="flex flex-col justify-around md:flex-row items-start md:items-center gap-8 max-w-6xl mx-auto">
         {/* LEFT : Social Icons */}
@@ -77,7 +98,7 @@ const SocialSection = () => {
         {/* RIGHT : WhatsApp Join Section */}
         <div
           className="relative  overflow-hidden p-6 rounded-2xl
-                       bg-gradient-to-br from-green-900/30 to-green-800/20
+                       bg-linear-to-br from-green-900/30 to-green-800/20
                        border border-green-700/30 backdrop-blur-sm
                        hover:border-green-500/50 transition-all duration-300"
         >
@@ -109,7 +130,7 @@ const SocialSection = () => {
               rel="noopener noreferrer"
               className="relative overflow-hidden inline-flex items-center gap-2
                            px-6 py-3 rounded-xl font-medium text-white
-                           bg-gradient-to-r from-green-500 to-green-600
+                           bg-linear-to-r from-green-500 to-green-600
                            transition-all duration-300
                            hover:from-green-600 hover:to-green-700
                            hover:shadow-lg hover:shadow-green-500/30

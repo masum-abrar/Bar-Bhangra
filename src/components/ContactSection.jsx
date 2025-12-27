@@ -37,28 +37,28 @@ export default function ContactSection() {
   const [submitStatus, setSubmitStatus] = useState("idle"); // "idle" | "success" | "error"
 
   // Animation on scroll
-  useEffect(() => {
-    const elements = formRef.current?.children || [];
-    gsap.set(elements, { opacity: 0, y: 40 });
+  // useEffect(() => {
+  //   const elements = formRef.current?.children || [];
+  //   gsap.set(elements, { opacity: 0, y: 40 });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top 80%",
-        toggleActions: "play none none reverse",
-      },
-    });
+  //   const tl = gsap.timeline({
+  //     scrollTrigger: {
+  //       trigger: sectionRef.current,
+  //       start: "top 80%",
+  //       toggleActions: "play none none reverse",
+  //     },
+  //   });
 
-    tl.to(elements, {
-      opacity: 1,
-      y: 0,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: "power2.out",
-    });
+  //   tl.to(elements, {
+  //     opacity: 1,
+  //     y: 0,
+  //     stagger: 0.1,
+  //     duration: 0.8,
+  //     ease: "power2.out",
+  //   });
 
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
-  }, []);
+  //   return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+  // }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -143,41 +143,41 @@ export default function ContactSection() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative py-28 bg-gradient-to-b from-black via-gray-950 to-black text-white overflow-hidden"
+      className="relative py-28 bg-linear-to-b from-black via-gray-950 to-black text-white overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Gradient orbs */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-br from-red-600/10 via-transparent to-red-600/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-gradient-to-tl from-red-600/10 via-transparent to-red-600/5 rounded-full blur-3xl" />
+        {/* linear orbs */}
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-linear-to-br from-red-600/10 via-transparent to-red-600/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-linear-to-tl from-red-600/10 via-transparent to-red-600/5 rounded-full blur-3xl" />
 
         {/* Grid pattern */}
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
-            backgroundImage: `linear-gradient(to right, white 1px, transparent 1px),
-                             linear-gradient(to bottom, white 1px, transparent 1px)`,
+            backgroundImage: `linear-linear(to right, white 1px, transparent 1px),
+                             linear-linear(to bottom, white 1px, transparent 1px)`,
             backgroundSize: "60px 60px",
           }}
         />
 
         {/* Decorative lines */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-600/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-600/30 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-red-600/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-red-600/30 to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center mb-6">
-            <div className="w-12 h-px bg-gradient-to-r from-transparent to-red-600 mr-4" />
+            <div className="w-12 h-px bg-linear-to-r from-transparent to-red-600 mr-4" />
             <span className="text-red-600 text-2xl">✉️</span>
-            <div className="w-12 h-px bg-gradient-to-l from-transparent to-red-600 ml-4" />
+            <div className="w-12 h-px bg-linear-to-l from-transparent to-red-600 ml-4" />
           </div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
             Get In{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-600 to-red-400">
               Touch
             </span>
           </h2>
@@ -202,7 +202,7 @@ export default function ContactSection() {
                     key={index}
                     className="flex items-start gap-4 p-4 rounded-xl bg-gray-900/30 backdrop-blur-sm border border-gray-800/50 hover:border-red-600/30 transition-all duration-300"
                   >
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-red-900/20 flex items-center justify-center">
+                    <div className="shrink-0 w-12 h-12 rounded-full bg-red-900/20 flex items-center justify-center">
                       {info.icon}
                     </div>
                     <div>
@@ -221,7 +221,7 @@ export default function ContactSection() {
             </div>
 
             {/* Company Info */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-gray-900/40 to-gray-900/20 backdrop-blur-sm border border-gray-800/50">
+            <div className="p-6 rounded-2xl bg-linear-to-br from-gray-900/40 to-gray-900/20 backdrop-blur-sm border border-gray-800/50">
               <h4 className="text-xl font-bold text-white mb-4">
                 MZ Corporation OY
               </h4>
@@ -240,7 +240,7 @@ export default function ContactSection() {
           <div className="relative">
             {/* Status Messages */}
             {submitStatus === "success" && (
-              <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-emerald-900/30 to-emerald-800/20 border border-emerald-800/30 flex items-center gap-3">
+              <div className="mb-6 p-4 rounded-xl bg-linear-to-r from-emerald-900/30 to-emerald-800/20 border border-emerald-800/30 flex items-center gap-3">
                 <FaCheckCircle className="text-emerald-400 text-xl" />
                 <div>
                   <p className="font-semibold text-emerald-400">
@@ -254,7 +254,7 @@ export default function ContactSection() {
             )}
 
             {submitStatus === "error" && (
-              <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-red-900/30 to-red-800/20 border border-red-800/30 flex items-center gap-3">
+              <div className="mb-6 p-4 rounded-xl bg-linear-to-r from-red-900/30 to-red-800/20 border border-red-800/30 flex items-center gap-3">
                 <FaExclamationCircle className="text-red-400 text-xl" />
                 <div>
                   <p className="font-semibold text-red-400">
@@ -267,7 +267,7 @@ export default function ContactSection() {
               </div>
             )}
 
-            <div className="bg-gradient-to-br from-gray-900/40 to-gray-900/20 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-8">
+            <div className="bg-linear-to-br from-gray-900/40 to-gray-900/20 backdrop-blur-xl rounded-2xl border border-gray-800/50 p-8">
               <h3 className="text-2xl font-bold text-white mb-2">
                 Send us a Message
               </h3>
@@ -361,7 +361,7 @@ export default function ContactSection() {
                   className={`btn-splash w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 ${
                     isSubmitting
                       ? "bg-gray-700 cursor-not-allowed"
-                      : "bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 hover:shadow-2xl hover:shadow-red-600/30"
+                      : "bg-linear-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 hover:shadow-2xl hover:shadow-red-600/30"
                   }`}
                 >
                   {isSubmitting ? (
