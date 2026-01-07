@@ -120,7 +120,7 @@ export default function HeroEvent() {
 
   return (
     <section
-      id="home"
+      id="events"
       ref={sectionRef}
       className="relative pt-32 pb-28 bg-black text-white overflow-hidden"
     >

@@ -35,6 +35,8 @@ export default function ContactSection() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("idle"); // "idle" | "success" | "error"
+  const [companyData, setCompanyData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Animation on scroll
   // useEffect(() => {
@@ -133,6 +135,27 @@ export default function ContactSection() {
     },
   ];
 
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          "https://bar-bhangra-backend.vercel.app/api/v1/company-info"
+        );
+        const data = await res.json();
+
+        if (!data.success) throw new Error(data.message);
+        if (data.data) setCompanyData(data.data);
+      } catch (err) {
+        toast.error(err.message || "Failed to load company info");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanyInfo();
+  }, []);
+
   const socialLinks = [
     { icon: <FaFacebook />, href: "#", label: "Facebook" },
     { icon: <FaInstagram />, href: "#", label: "Instagram" },
@@ -197,23 +220,49 @@ export default function ContactSection() {
               </h3>
 
               <div className="space-y-6">
-                {contactInfo.map((info, index) => (
+                {[
+                  {
+                    title: "Address",
+                    icon: <FaMapMarkerAlt className="text-red-500 text-xl" />,
+                    details: [companyData?.address1, companyData?.address2],
+                  },
+                  {
+                    title: "Phone",
+                    icon: <FaPhone className="text-red-500 text-xl" />,
+                    details: [companyData?.phone1, companyData?.phone2],
+                  },
+                  {
+                    title: "Email",
+                    icon: <FaEnvelope className="text-red-500 text-xl" />,
+                    details: [companyData?.email1, companyData?.email2],
+                  },
+                  {
+                    title: "Opening Hours",
+                    icon: <FaClock className="text-red-500 text-xl" />,
+                    details: [companyData?.hours1, companyData?.hours2],
+                  },
+                ].map((info, index) => (
                   <div
                     key={index}
                     className="flex items-start gap-4 p-4 rounded-xl bg-gray-900/30 backdrop-blur-sm border border-gray-800/50 hover:border-red-600/30 transition-all duration-300"
                   >
                     <div className="shrink-0 w-12 h-12 rounded-full bg-red-900/20 flex items-center justify-center">
-                      {info.icon}
+                      {info?.icon}
                     </div>
+
                     <div>
                       <h4 className="text-lg font-semibold text-white mb-1">
-                        {info.title}
+                        {info?.title}
                       </h4>
-                      {info.details.map((detail, idx) => (
-                        <p key={idx} className="text-gray-400 text-sm">
-                          {detail}
-                        </p>
-                      ))}
+
+                      {info?.details.map(
+                        (detail, idx) =>
+                          detail && (
+                            <p key={idx} className="text-gray-400 text-sm">
+                              {detail}
+                            </p>
+                          )
+                      )}
                     </div>
                   </div>
                 ))}
@@ -223,17 +272,30 @@ export default function ContactSection() {
             {/* Company Info */}
             <div className="p-6 rounded-2xl bg-linear-to-br from-gray-900/40 to-gray-900/20 backdrop-blur-sm border border-gray-800/50">
               <h4 className="text-xl font-bold text-white mb-4">
-                MZ Corporation OY
+                {companyData?.name}
               </h4>
-              <div className="space-y-2">
+
+              <div className="space-y-2 text-sm">
                 <p className="text-gray-400">
-                  Business ID: <span className="text-white">3478156-2</span>
+                  Business ID:{" "}
+                  <span className="text-white">{companyData?.businessId}</span>
                 </p>
+
                 <p className="text-gray-400">
-                  VAT: <span className="text-white">FI34781562</span>
+                  VAT: <span className="text-white">{companyData?.vat}</span>
                 </p>
               </div>
             </div>
+
+            <a
+              href="https://premium240.web-hosting.com:2096/webmaillogout.cgi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-splash w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-3 bg-linear-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 hover:shadow-2xl hover:shadow-red-600/30"
+            >
+              Open WEBMAIL
+              <span className="text-lg">↗</span>
+            </a>
           </div>
 
           {/* Contact Form */}

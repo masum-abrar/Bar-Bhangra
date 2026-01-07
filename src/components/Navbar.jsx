@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import {
   FaBars,
@@ -67,21 +68,28 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             {/* Logo/Brand Section */}
             <div className="flex items-center gap-3">
-              <div className="relative">
+              {/* <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-amber-600 rounded-xl flex items-center justify-center transform rotate-45">
                   <FaWineGlassAlt className="text-white -rotate-45 text-lg" />
                 </div>
                 <div className="absolute -top-1 -right-1">
                   <FaCrown className="text-yellow-400 text-xs" />
                 </div>
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-white font-bold text-xl lg:text-2xl tracking-tight">
+              </div> */}
+              <div className="flex flex-col bg-white rounded-2xl">
+                {/* <h1 className="text-white font-bold text-xl lg:text-2xl tracking-tight">
                   BAR{" "}
                   <span className="bg-gradient-to-r from-red-500 to-amber-500 bg-clip-text text-transparent">
                     BHANGRA
                   </span>
-                </h1>
+                </h1> */}
+                <Link href="/">
+                  <img
+                    src="/logo-1.png"
+                    alt="logo"
+                    className="h-10 w-auto sm:h-14 md:h-14"
+                  />
+                </Link>
               </div>
             </div>
 
@@ -150,7 +158,7 @@ export default function Navbar() {
 
                 {/* Content */}
                 <FaPhoneAlt className="relative z-10 text-sm" />
-                <span className="relative z-10">Book Now</span>
+                <span className="relative z-10">Contact Us</span>
               </a>
             </nav>
 
@@ -161,7 +169,7 @@ export default function Navbar() {
                 onClick={() => handleLinkClick("contact")}
                 className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300"
               >
-                Book
+                Contact
               </a>
               <button
                 onClick={() => setIsOpen(!isOpen)}

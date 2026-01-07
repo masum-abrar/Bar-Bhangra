@@ -20,7 +20,7 @@ export default function EventPopup() {
   const overlayRef = useRef(null);
   const contentRef = useRef(null);
   const [event, setEvent] = useState(null);
-
+  const [popupEnabled, setPopupEnabled] = useState(false);
   // Check for mobile on mount and resize
   useEffect(() => {
     const checkMobile = () => {
@@ -31,7 +31,20 @@ export default function EventPopup() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
+  useEffect(() => {
+    const fetchSetting = async () => {
+      try {
+        const res = await fetch(
+          "https://bar-bhangra-backend.vercel.app/api/v1/settings/event-popup"
+        );
+        const data = await res.json();
+        if (data.success && data.enabled) setPopupEnabled(true);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSetting();
+  }, []);
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -132,7 +145,8 @@ export default function EventPopup() {
   };
 
   if (!show) return null;
-
+  // Only show popup if enabled
+  if (!popupEnabled) return null;
   return (
     <>
       {/* Overlay with Glass Effect */}
