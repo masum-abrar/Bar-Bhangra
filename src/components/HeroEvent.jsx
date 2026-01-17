@@ -46,17 +46,17 @@ export default function HeroEvent() {
     tl.to(
       imageRef.current,
       { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" },
-      0.2
+      0.2,
     )
       .to(
         contentRef.current,
         { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" },
-        0.4
+        0.4,
       )
       .to(
         titleRef.current,
         { opacity: 1, x: 0, duration: 0.8, ease: "back.out(1.7)" },
-        0.6
+        0.6,
       );
 
     gsap.to(menuItemsRef.current, {
@@ -84,7 +84,7 @@ export default function HeroEvent() {
     const fetchEvent = async () => {
       try {
         const res = await fetch(
-          "https://bar-bhangra-backend.vercel.app/api/v1/bar-events"
+          "https://bar-bhangra-backend.vercel.app/api/v1/bar-events",
         );
         const data = await res.json();
 
@@ -192,16 +192,16 @@ export default function HeroEvent() {
                         i % 3 === 0
                           ? "#ef4444"
                           : i % 3 === 1
-                          ? "#3b82f6"
-                          : "#8b5cf6",
+                            ? "#3b82f6"
+                            : "#8b5cf6",
                       left: `${Math.random() * 100}%`,
                       top: `${Math.random() * 100}%`,
                       boxShadow: `0 0 ${i % 2 === 0 ? "15px" : "8px"} ${
                         i % 3 === 0
                           ? "#ef4444"
                           : i % 3 === 1
-                          ? "#3b82f6"
-                          : "#8b5cf6"
+                            ? "#3b82f6"
+                            : "#8b5cf6"
                       }`,
                       animation: `float ${
                         2 + Math.random() * 2
@@ -240,7 +240,7 @@ export default function HeroEvent() {
                     e.currentTarget.style.filter =
                       "brightness(1.1) contrast(1.2)";
                     e.currentTarget.parentElement.querySelector(
-                      ".shine-effect"
+                      ".shine-effect",
                     ).style.transform = "translateX(100%)";
                   }}
                   onMouseLeave={(e) => {
@@ -248,7 +248,7 @@ export default function HeroEvent() {
                     e.currentTarget.style.filter =
                       "brightness(0.9) contrast(1.1)";
                     e.currentTarget.parentElement.querySelector(
-                      ".shine-effect"
+                      ".shine-effect",
                     ).style.transform = "translateX(-100%)";
                   }}
                 />
@@ -282,10 +282,10 @@ export default function HeroEvent() {
                           i % 4 === 0
                             ? "#ef4444"
                             : i % 4 === 1
-                            ? "#3b82f6"
-                            : i % 4 === 2
-                            ? "#8b5cf6"
-                            : "#10b981"
+                              ? "#3b82f6"
+                              : i % 4 === 2
+                                ? "#8b5cf6"
+                                : "#10b981"
                         })`,
                         left: i % 4 === 0 ? "0" : "auto",
                         right: i % 4 === 1 ? "0" : "auto",
@@ -305,10 +305,10 @@ export default function HeroEvent() {
                           i % 4 === 0
                             ? "#ef4444"
                             : i % 4 === 1
-                            ? "#3b82f6"
-                            : i % 4 === 2
-                            ? "#8b5cf6"
-                            : "#10b981"
+                              ? "#3b82f6"
+                              : i % 4 === 2
+                                ? "#8b5cf6"
+                                : "#10b981"
                         }`,
                         transition: "opacity 0.5s",
                         transitionDelay: `${i * 50}ms`,

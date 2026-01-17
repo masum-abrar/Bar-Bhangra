@@ -34,7 +34,7 @@ export default function ContactSection() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState("idle"); // "idle" | "success" | "error"
+  const [submitStatus, setSubmitStatus] = useState("idle");
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -87,7 +87,7 @@ export default function ContactSection() {
             borderRadius: "12px",
           },
           icon: "✉️",
-        }
+        },
       );
     } catch (err) {
       console.error(err);
@@ -140,7 +140,7 @@ export default function ContactSection() {
       try {
         setLoading(true);
         const res = await fetch(
-          "https://bar-bhangra-backend.vercel.app/api/v1/company-info"
+          "https://bar-bhangra-backend.vercel.app/api/v1/company-info",
         );
         const data = await res.json();
 
@@ -261,7 +261,7 @@ export default function ContactSection() {
                             <p key={idx} className="text-gray-400 text-sm">
                               {detail}
                             </p>
-                          )
+                          ),
                       )}
                     </div>
                   </div>

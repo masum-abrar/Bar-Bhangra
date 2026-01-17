@@ -1,3 +1,4 @@
+import Announcement from "@/components/Announcement";
 import ContactSection from "@/components/ContactSection";
 import EventPopup from "@/components/EventPopup";
 import Footer from "@/components/Footer";
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <div>
       <Navbar />
+      <Announcement />
       <HeroEvent />
       <EventPopup />
       <HistorySection />

@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { FaQuoteLeft, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { LuX } from "react-icons/lu";
 
 export default function SimpleSlider() {
   const trackRef = useRef(null);
@@ -10,13 +11,15 @@ export default function SimpleSlider() {
 
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Fetch slides
   useEffect(() => {
     const fetchSlides = async () => {
       try {
         const res = await fetch(
-          "https://bar-bhangra-backend.vercel.app/api/v1/slider"
+          "https://bar-bhangra-backend.vercel.app/api/v1/slider",
         );
         const data = await res.json();
         if (data.success) setSlides(data.data || []);
@@ -30,14 +33,13 @@ export default function SimpleSlider() {
     fetchSlides();
   }, []);
 
-  // Slide handlers
+  // Slider scroll handler
   const slideBy = (direction) => {
     const track = trackRef.current;
     const container = containerRef.current;
     if (!track || !container) return;
 
     const slideWidth = track.children[0]?.clientWidth + 24 || 300;
-
     const maxScroll = track.scrollWidth - container.clientWidth;
 
     let nextX =
@@ -54,12 +56,34 @@ export default function SimpleSlider() {
     });
   };
 
+  // Modal navigation
+  const openModal = (index) => {
+    setCurrentIndex(index);
+    setModalOpen(true);
+  };
+
+  const prevModal = () => {
+    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  const nextModal = () => {
+    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full py-16 flex justify-center items-center">
+        <div className="text-white animate-pulse">Loading Gallery...</div>
+      </div>
+    );
+  }
+
   return (
     <section
       id="gallery"
       className="relative py-16 bg-gradient-to-br from-red-900 via-black to-red-800 text-white overflow-hidden"
     >
-      {/* Background decorations (unchanged) */}
+      {/* Background decorations */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-br from-red-600/40 to-red-600/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gradient-to-tl from-red-600/40 to-red-600/10 rounded-full blur-3xl" />
@@ -98,7 +122,7 @@ export default function SimpleSlider() {
         {/* Slider */}
         <div className="relative">
           {/* Arrows */}
-          {!loading && slides.length > 0 && (
+          {slides.length > 0 && (
             <>
               <button
                 onClick={() => slideBy("left")}
@@ -116,45 +140,78 @@ export default function SimpleSlider() {
             </>
           )}
 
-          {/* Content */}
           <div ref={containerRef} className="overflow-hidden">
             <div
               ref={trackRef}
               className="flex gap-6"
               style={{ width: "max-content", transform: "translateX(0px)" }}
             >
-              {loading &&
-                [...Array(3)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-[280px] md:w-[350px] h-[200px] rounded-xl bg-white/10 animate-pulse"
-                  />
-                ))}
-
-              {!loading &&
-                slides.map((slide) => (
-                  <div
-                    key={slide.id}
-                    className="flex-shrink-0 w-[280px] md:w-[350px]"
-                  >
-                    <div className="relative rounded-xl overflow-hidden shadow-lg">
-                      <div className="aspect-video">
-                        <img
-                          src={slide.image}
-                          alt={slide.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                        <h3 className="text-lg font-semibold">{slide.title}</h3>
-                      </div>
+              {slides.map((slide, index) => (
+                <div
+                  key={slide.id}
+                  className="flex-shrink-0 w-[280px] md:w-[350px] cursor-pointer"
+                  onClick={() => openModal(index)}
+                >
+                  <div className="relative rounded-xl overflow-hidden shadow-lg">
+                    <div className="aspect-video">
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <h3 className="text-lg font-semibold">{slide.title}</h3>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-start justify-center p-4">
+          <div className="relative max-w-4xl w-full mx-auto mt-20 px-2">
+            {/* Close button */}
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-2 right-2 text-white text-2xl hover:text-red-500 z-20"
+            >
+              &times;
+            </button>
+
+            {/* Prev/Next */}
+            <button
+              onClick={prevModal}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-red-600 p-3 rounded-full text-white z-20"
+            >
+              <FaChevronLeft />
+            </button>
+
+            <button
+              onClick={nextModal}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-red-600 p-3 rounded-full text-white z-20"
+            >
+              <FaChevronRight />
+            </button>
+
+            {/* Image */}
+            <div className="overflow-hidden rounded-xl shadow-lg">
+              <img
+                src={slides[currentIndex].image}
+                alt={slides[currentIndex].title}
+                className="w-full h-auto lg:max-h-[70vh] object-contain mx-auto rounded-xl"
+              />
+              <div className="text-center text-white mt-4 text-lg md:text-xl font-semibold">
+                {slides[currentIndex].title}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
